@@ -5,7 +5,11 @@ We will be modelling orbiting bodies in three dimensions. The difficult part wil
 
 #Core Goals:
 *model in 3d
+
 *simple set up code
+
 *animation
+
 -celebrate with interesting models
+
 *precession modeling
