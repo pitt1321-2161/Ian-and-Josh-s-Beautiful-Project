@@ -12,4 +12,8 @@ We will be modelling orbiting bodies in three dimensions. The difficult part wil
 
 -celebrate with interesting models
 
+![](Figures/SolarSystem.jpg)
+
 *precession modeling
+
+![](Figures/DI_Herculis_precession.jpg)
