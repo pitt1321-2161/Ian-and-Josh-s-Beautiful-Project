@@ -81,11 +81,11 @@ def generalSystem2d(S,t,G=6.67408e-11):
     dm = np.zeros(N)
     
     for i in range(N):
-        m[i] = S[6*i]
-        x[i] = S[6*i+1]
-        y[i] = S[6*i+2]
-        vx[i] = S[6*i+3]
-        vy[i] = S[6*i+4]
+        m[i] = S[5*i]
+        x[i] = S[5*i+1]
+        y[i] = S[5*i+2]
+        vx[i] = S[5*i+3]
+        vy[i] = S[5*i+4]
     
     
     for i in range(N):
