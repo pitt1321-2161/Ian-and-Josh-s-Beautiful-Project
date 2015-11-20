@@ -109,3 +109,47 @@ def generalSystem2d(S,t,G=6.67408e-11):
         return_array = np.append(return_array,[dm[i],vx[i],vy[i],dvx[i],dvy[i]])
     
     return return_array
+
+def PlanetPlot2planets(orbits):
+    #x_set = np.array([orbits[:,1],orbits[:,6],orbits[:,11]])
+    #y_setdef PlanetPlot(orbits):
+    #x_set = np.array([orbits[:,1],orbits[:,6],orbits[:,11]])
+    #y_set = np.array([orbits[:,2],orbits[:,7],orbits[:,12]])
+    
+    x_set = np.array([orbits[:,1],orbits[:,6]])
+    y_set = np.array([orbits[:,2],orbits[:,7]])
+
+    fig = plt.figure(figsize=(8,6))
+    lim = x_set[1][0]
+    ax = plt.axes(xlim=(-2*lim, 2*lim), ylim=(-1.4*lim, 1.4*lim))
+    
+    sun = plt.Circle((x_set[0][0],y_set[0][0]),6e9,fc = 'y')
+    earth = plt.Circle((x_set[1][0],y_set[1][0]),4.6e9,fc = 'b')
+    #moon = plt.Circle((x_set[2][0],y_set[2][0]),2.3e9,fc = 'r')
+    line, = ax.plot([], [])
+    
+    def init():
+        sun.center= (x_set[0][0],y_set[0][0])
+        ax.add_patch(sun)
+        earth.center=(x_set[1][0],y_set[1][0])
+        ax.add_patch(earth)
+        #moon.center=(x_set[2][0],y_set[2][0])
+        #ax.add_patch(moon)
+        line.set_data(x_set[1][0],y_set[1][0])
+        return sun,earth,line
+
+    def animate(i):
+        sun.center = (x_set[0][i],y_set[0][i])
+        earth.center = (x_set[1][i],y_set[1][i])
+        #moon.center = (x_set[2][i],y_set[2][i])
+        line.set_data(x_set[1][0:i],y_set[1][0:i])
+        return sun,earth,line
+
+    anim = animation.FuncAnimation(fig, animate, 
+                               init_func=init, 
+                               frames=np.arange(1,9997), 
+                               interval=10,
+                               blit=False,repeat=False)
+    #FFwriter = animation.FFMpegWriter(fps=30)
+    #anim.save('orbitsweep.mp4',writer = FFwriter)
+    plt.show()
