@@ -1,6 +1,10 @@
+from __future__ import division
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.integrate import odeint
+from matplotlib import animation
+from matplotlib.path import Path
+import matplotlib.patches as patches
 from mpl_toolkits.mplot3d import Axes3D
 
 def generalSystem3d(S,t,G=6.67408e-11):
