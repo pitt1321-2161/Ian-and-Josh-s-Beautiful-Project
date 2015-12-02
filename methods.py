@@ -290,7 +290,7 @@ def Precession_Plot_3_Bodies(orbits):
     #anim.save('orbitsweep.mp4',writer = FFwriter)
     plt.show()
 	
-def Perihelion(ode_arr):
+def Perihelion_1st_Planet(ode_arr):
     sunx = ode_arr[:,1]
     suny = ode_arr[:,2]
     p1x = ode_arr[:,6]
