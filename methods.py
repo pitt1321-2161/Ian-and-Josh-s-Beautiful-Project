@@ -1,7 +1,7 @@
 from __future__ import division
 import numpy as np
 import matplotlib
-matplotlib.use("Agg")
+#matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 from scipy.integrate import odeint
 from matplotlib import animation
@@ -70,7 +70,6 @@ def generalSystem3d(S,t,G=6.67408e-11):
 def generalSystem2d(S,t,G=6.67408e-11):
     #S includes m formatted mi,xi,yi,vxi,vyi
     #G=6.67408e-11
-    #print(S0)
     N=len(S)//5
     x = S[1::5]
     y = S[2::5]
@@ -109,18 +108,18 @@ def PlanetPlot2planets(orbits):
     #y_setdef PlanetPlot(orbits):
     #x_set = np.array([orbits[:,1],orbits[:,6],orbits[:,11]])
     #y_set = np.array([orbits[:,2],orbits[:,7],orbits[:,12]])
-    Writer = animation.writers['ffmpeg']
-    writer = Writer(fps=30, metadata=dict(artist='Me'), bitrate=1800)
+    #Writer = animation.writers['ffmpeg']
+    #writer = Writer(fps=30, metadata=dict(artist='Me'), bitrate=1800)
     
     x_set = np.array([orbits[:,1],orbits[:,6]])
     y_set = np.array([orbits[:,2],orbits[:,7]])
 
-    fig = plt.figure(figsize=(8,8))
+    fig = plt.figure(figsize=(8.73,8))
     lim = x_set[1][0]
-    ax = plt.axes(xlim=(-1.1*lim, 1.1*lim), ylim=(-1.1*lim, 1.1*lim))
+    ax = plt.axes(xlim=(-1.1*lim, 1.2*lim), ylim=(-1.1*lim, 1.1*lim))
     
-    sun = plt.Circle((x_set[0][0],y_set[0][0]),6e9,fc = 'y')
-    earth = plt.Circle((x_set[1][0],y_set[1][0]),4.6e9,fc = 'b')
+    sun = plt.Circle((x_set[0][0],y_set[0][0]),6e9,fc = 'y',label='Sun')
+    earth = plt.Circle((x_set[1][0],y_set[1][0]),4.6e9,fc = 'b',label='Earth')
     #moon = plt.Circle((x_set[2][0],y_set[2][0]),2.3e9,fc = 'r')
     line, = ax.plot([], [])
     
@@ -143,17 +142,19 @@ def PlanetPlot2planets(orbits):
 
     anim = animation.FuncAnimation(fig, animate, 
                                init_func=init, 
-                               frames=np.arange(1,997), 
+                               frames=np.arange(1,9997), 
                                interval=10,
                                blit=False,repeat=False)
     #FFwriter = animation.FFMpegWriter(fps=30)
     # Set up formatting for the movie files
     #Writer = animation.writers['ffmpeg.exe']
     #writer = Writer(fps=30, metadata=dict(artist='Me'), bitrate=1800
-    plt.xlabel('Meters')
-    plt.ylabel('Meters')
-    plt.title('The Earth Revolving around the Sun')
-    anim.save('sun_earth.mp4', writer=writer)
+    plt.xlabel('Meters',fontsize=15)
+    plt.ylabel('Meters',fontsize=15)
+    plt.title('The Earth Revolving around the Sun',fontsize=20)
+    plt.legend(loc=(0.93,0))
+    #anim.save('sun_earth.mp4', writer=writer)
+    plt.show()
 	
 def SolarSysPlot(orbits):
     
@@ -161,29 +162,29 @@ def SolarSysPlot(orbits):
     y_set = np.array([orbits[:,2], orbits[:,7], orbits[:,12], orbits[:,17], orbits[:,22], orbits[:,27], orbits[:,32], orbits[:,37], orbits[:,42]])
 
     Writer = animation.writers['ffmpeg']
-    writer = Writer(fps=30, metadata=dict(artist='Me'), bitrate=1800)
+    writer = Writer(fps=80, metadata=dict(artist='Me'), bitrate=1800)
 
-    fig = plt.figure(figsize=(8,8))
+    fig = plt.figure(figsize=(9.45,8))
     lim = x_set[8][0]
-    ax = plt.axes(xlim=(-1.1*lim, 1.1*lim), ylim=(-1.1*lim, 1.1*lim))
+    ax = plt.axes(xlim=(-1.1*lim, 1.3*lim), ylim=(-1.1*lim, 1.1*lim))
     
-    sun = plt.Circle((x_set[0][0],y_set[0][0]), 6.96e8, fc = 'y')
+    sun = plt.Circle((x_set[0][0],y_set[0][0]), 6.96e8, fc = 'y',label='Sun')
     mercury = plt.Circle((x_set[1][0],y_set[1][0]), 2.440e6)
-    mline, = ax.plot([], [])
+    mline, = ax.plot([], [],label='Mercury')
     venus = plt.Circle((x_set[2][0],y_set[2][0]), 6.052e6)
-    vline, = ax.plot([], [])
+    vline, = ax.plot([], [],label='Venus')
     earth = plt.Circle((x_set[3][0],y_set[3][0]), 6.378e6)
-    eline, = ax.plot([], [])
-    mars = plt.Circle((x_set[4][0],y_set[4][0]), 3.397e6)
-    maline, = ax.plot([], [])
+    eline, = ax.plot([], [],label='Earth')
+    mars = plt.Circle((x_set[4][0],y_set[4][0], 3.397e6))
+    maline, = ax.plot([], [],label='Mars')
     jupiter = plt.Circle((x_set[5][0],y_set[5][0]), 7.1492e9)
-    jline, = ax.plot([], [])
+    jline, = ax.plot([], [],label='Jupiter')
     saturn = plt.Circle((x_set[6][0],y_set[6][0]), 6.0268e9)
-    sline, = ax.plot([], [])
+    sline, = ax.plot([], [],label='Saturn')
     uranus = plt.Circle((x_set[7][0],y_set[7][0]), 2.5559e9)
-    uline, = ax.plot([], [])
+    uline, = ax.plot([], [],label='Uranus')
     neptune = plt.Circle((x_set[8][0],y_set[8][0]), 2.4766e9)
-    nline, = ax.plot([], [])
+    nline, = ax.plot([], [],label='Neptune')
     
     def init():
         sun.center = (x_set[0][0], y_set[0][0])
@@ -251,9 +252,10 @@ def SolarSysPlot(orbits):
                                frames=np.arange(1,9997), 
                                interval=1,
                                blit=False,repeat=False)
-    plt.xlabel('Meters')
-    plt.ylabel('Meters')
-    plt.title('Our Solar System')
+    plt.xlabel('Meters',fontsize=15)
+    plt.ylabel('Meters',fontsize=15)
+    plt.title('Our Solar System',fontsize=20)
+    plt.legend(loc=(0.90,0.3))
     anim.save('solar_system.mp4', writer=writer)
     plt.show()
 	    
@@ -261,16 +263,20 @@ def Precession_Plot_3_Bodies(orbits):
     
     x_set = np.array([orbits[:,1],orbits[:,6],orbits[:,11]])
     y_set = np.array([orbits[:,2],orbits[:,7],orbits[:,12]])
-
-    fig = plt.figure(figsize=(8,8))
-    lim = x_set[2][0]
-    ax = plt.axes(xlim=(-1.1*lim, 1.1*lim), ylim=(-1.1*lim, 1.1*lim))
     
-    sun = plt.Circle((x_set[0][0],y_set[0][0]),6e9,fc = 'y')
-    p1 = plt.Circle((x_set[1][0],y_set[1][0]),1e9)
+    Writer = animation.writers['ffmpeg']
+    writer = Writer(fps=30, metadata=dict(artist='Me'), bitrate=1800)
+    
+    fig = plt.figure(figsize=(9.45,8))
+    lim = x_set[2][0]
+    ax = plt.axes(xlim=(-1.1*lim, 1.3*lim), ylim=(-1.1*lim, 1.1*lim))
+
+    
+    sun = plt.Circle((x_set[0][0],y_set[0][0]),6e9,fc = 'y',label='Sun')
+    p1 = plt.Circle((x_set[1][0],y_set[1][0]),2e9)
     p2 = plt.Circle((x_set[2][0],y_set[2][0]),4e9)
-    line1, = ax.plot([], [])
-    line2, = ax.plot([], [])
+    line1, = ax.plot([], [],label='Planet 1')
+    line2, = ax.plot([], [],label='Planet 2')
     lineSun, = ax.plot([], [])
     
     def init():
@@ -299,8 +305,12 @@ def Precession_Plot_3_Bodies(orbits):
                                frames=np.arange(1,9997), 
                                interval=1,
                                blit=False,repeat=False)
-    #FFwriter = animation.FFMpegWriter(fps=30)
-    #anim.save('orbitsweep.mp4',writer = FFwriter)
+    
+    plt.xlabel('Meters',fontsize=15)
+    plt.ylabel('Meters',fontsize=15)
+    plt.title('3 Body Simple Precession',fontsize=20)
+    plt.legend(loc=(0.90,0.3))
+    anim.save('precession_3bodies.mp4', writer=writer)
     plt.show()
 	
 def Perihelion_1st_Planet(ode_arr):
