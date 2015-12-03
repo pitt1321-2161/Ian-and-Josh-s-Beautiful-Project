@@ -1,5 +1,7 @@
 from __future__ import division
 import numpy as np
+import matplotlib
+matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 from scipy.integrate import odeint
 from matplotlib import animation
@@ -107,6 +109,8 @@ def PlanetPlot2planets(orbits):
     #y_setdef PlanetPlot(orbits):
     #x_set = np.array([orbits[:,1],orbits[:,6],orbits[:,11]])
     #y_set = np.array([orbits[:,2],orbits[:,7],orbits[:,12]])
+    Writer = animation.writers['ffmpeg']
+    writer = Writer(fps=30, metadata=dict(artist='Me'), bitrate=1800)
     
     x_set = np.array([orbits[:,1],orbits[:,6]])
     y_set = np.array([orbits[:,2],orbits[:,7]])
@@ -139,18 +143,25 @@ def PlanetPlot2planets(orbits):
 
     anim = animation.FuncAnimation(fig, animate, 
                                init_func=init, 
-                               frames=np.arange(1,9997), 
+                               frames=np.arange(1,997), 
                                interval=10,
                                blit=False,repeat=False)
     #FFwriter = animation.FFMpegWriter(fps=30)
-    #anim.save('orbitsweep.mp4',writer = FFwriter)
-    plt.show()
+    # Set up formatting for the movie files
+    #Writer = animation.writers['ffmpeg.exe']
+    #writer = Writer(fps=30, metadata=dict(artist='Me'), bitrate=1800
+    plt.xlabel('Meters')
+    plt.ylabel('Meters')
+    plt.title('The Earth Revolving around the Sun')
+    anim.save('sun_earth.mp4', writer=writer)
 	
 def SolarSysPlot(orbits):
     
     x_set = np.array([orbits[:,1], orbits[:,6], orbits[:,11], orbits[:,16], orbits[:,21], orbits[:,26], orbits[:,31], orbits[:,36], orbits[:,41]])
     y_set = np.array([orbits[:,2], orbits[:,7], orbits[:,12], orbits[:,17], orbits[:,22], orbits[:,27], orbits[:,32], orbits[:,37], orbits[:,42]])
 
+    Writer = animation.writers['ffmpeg']
+    writer = Writer(fps=30, metadata=dict(artist='Me'), bitrate=1800)
 
     fig = plt.figure(figsize=(8,8))
     lim = x_set[8][0]
@@ -240,8 +251,10 @@ def SolarSysPlot(orbits):
                                frames=np.arange(1,9997), 
                                interval=1,
                                blit=False,repeat=False)
-    #FFwriter = animation.FFMpegWriter(fps=30)
-    #anim.save('orbitsweep.mp4',writer = FFwriter)
+    plt.xlabel('Meters')
+    plt.ylabel('Meters')
+    plt.title('Our Solar System')
+    anim.save('solar_system.mp4', writer=writer)
     plt.show()
 	    
 def Precession_Plot_3_Bodies(orbits):
