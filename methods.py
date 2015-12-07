@@ -327,3 +327,50 @@ def Perihelion_1st_Planet(ode_arr):
     for i in nums:
         angs.append(np.arctan(p1y[i]/p1x[i]))
     return angs
+	
+def Eccentricity(ODE, perihelion):
+    for i in range(1,len(ODE)//15 -1):
+        if ODE[6*i] >= ODE[6*(i-1)] and ODE[6*i] >= ODE[6*(i+1)]:
+            aphelion = ODE[6*i]
+            break
+    eccentricity = 1 - 2/((aphelion/perihelion) + 1)
+    return eccentricity 
+	
+def Editing_Precession(mass_arr, vel_arr):
+    # Please make one of the above arrays is constant for any one run through
+    t=np.linspace(0,1e10,1e7+1)
+    G = 6.67408e-11
+    
+    msun = 1.989e30
+    m1 = 5.97e23
+    x1o = 149.6e8
+    y1o = 0
+    vx1o = 0
+    vy1o = 123.7859e3
+    m2 = 5.90e26
+    x2o = 227.9e9
+    y2o = 0
+    vx2o = 0
+    vy2o = 24.1309e3
+    
+    S = np.array()
+    
+    if mass_arr[0] == mass_arr[1]:
+        for i in range(len(mass_arr)):
+            S = np.append(S, [msun,0,0,0,-(m1*vy1o + mass_arr[i]*vy2o)/msun, m1,x1o,y1o,vx1o,vy1o, mass_arr[i],x2o,y2o,vx2o,vy2o])
+    if vel_arr[0] == vel_arr[1]:
+        for i in range(len(vel_arr)):
+            S = np.append(S, [msun,0,0,0,-(m1*vel_arr[i] + m2*vy2o)/msun, m1,x1o,y1o,vx1o,vel_arr[i], m2,x2o,y2o,vx2o,vy2o])
+    
+    Slopes = []
+    Eccentricities = []
+    
+    for i in range(len(S)):
+        S1 = odeint(generalSystem2d,i,t)
+        Eccentricities.append(Eccentricity(S1, x1o))
+        angs = Perihelion_1st_Planet(S1)
+        orbits = np.linspace(0, len(angs), len(angs))
+        slope, intercept = np.polyfit(orbits, angs, 1)
+        Slopes.append(slope)
+        
+    return Slopes, Eccentricities
