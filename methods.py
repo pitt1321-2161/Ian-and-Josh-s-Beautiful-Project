@@ -161,8 +161,8 @@ def SolarSysPlot(orbits):
     x_set = np.array([orbits[:,1], orbits[:,6], orbits[:,11], orbits[:,16], orbits[:,21], orbits[:,26], orbits[:,31], orbits[:,36], orbits[:,41]])
     y_set = np.array([orbits[:,2], orbits[:,7], orbits[:,12], orbits[:,17], orbits[:,22], orbits[:,27], orbits[:,32], orbits[:,37], orbits[:,42]])
 
-    Writer = animation.writers['ffmpeg']
-    writer = Writer(fps=80, metadata=dict(artist='Me'), bitrate=1800)
+    #Writer = animation.writers['ffmpeg']
+    #writer = Writer(fps=80, metadata=dict(artist='Me'), bitrate=1800)
 
     fig = plt.figure(figsize=(9.45,8))
     lim = x_set[8][0]
@@ -256,7 +256,7 @@ def SolarSysPlot(orbits):
     plt.ylabel('Meters',fontsize=15)
     plt.title('Our Solar System',fontsize=20)
     plt.legend(loc=(0.90,0.3))
-    anim.save('solar_system.mp4', writer=writer)
+    #anim.save('solar_system.mp4', writer=writer)
     plt.show()
 	    
 def Precession_Plot_3_Bodies(orbits):
@@ -264,8 +264,8 @@ def Precession_Plot_3_Bodies(orbits):
     x_set = np.array([orbits[:,1],orbits[:,6],orbits[:,11]])
     y_set = np.array([orbits[:,2],orbits[:,7],orbits[:,12]])
     
-    Writer = animation.writers['ffmpeg']
-    writer = Writer(fps=30, metadata=dict(artist='Me'), bitrate=1800)
+    #Writer = animation.writers['ffmpeg']
+    #writer = Writer(fps=30, metadata=dict(artist='Me'), bitrate=1800)
     
     fig = plt.figure(figsize=(9.45,8))
     lim = x_set[2][0]
@@ -310,7 +310,7 @@ def Precession_Plot_3_Bodies(orbits):
     plt.ylabel('Meters',fontsize=15)
     plt.title('3 Body Simple Precession',fontsize=20)
     plt.legend(loc=(0.90,0.3))
-    anim.save('precession_3bodies.mp4', writer=writer)
+    #anim.save('precession_3bodies.mp4', writer=writer)
     plt.show()
 	
 def Perihelion_1st_Planet(ode_arr):
@@ -329,9 +329,9 @@ def Perihelion_1st_Planet(ode_arr):
     return angs
 	
 def Eccentricity(ODE, perihelion):
-    for i in range(1,len(ODE)//15 -1):
-        if ODE[6*i] >= ODE[6*(i-1)] and ODE[6*i] >= ODE[6*(i+1)]:
-            aphelion = ODE[6*i]
+    for i in range(1,len(ODE) -1):
+        if abs(ODE[i,6]) >= abs(ODE[i-1,6]) and abs(ODE[i,6]) >= abs(ODE[i+1,6]):
+            aphelion = abs(ODE[i,6])
             break
     eccentricity = 1 - 2/((aphelion/perihelion) + 1)
     return eccentricity 
@@ -353,24 +353,29 @@ def Editing_Precession(mass_arr, vel_arr):
     vx2o = 0
     vy2o = 24.1309e3
     
-    S = np.array()
-    
-    if mass_arr[0] == mass_arr[1]:
-        for i in range(len(mass_arr)):
-            S = np.append(S, [msun,0,0,0,-(m1*vy1o + mass_arr[i]*vy2o)/msun, m1,x1o,y1o,vx1o,vy1o, mass_arr[i],x2o,y2o,vx2o,vy2o])
-    if vel_arr[0] == vel_arr[1]:
-        for i in range(len(vel_arr)):
-            S = np.append(S, [msun,0,0,0,-(m1*vel_arr[i] + m2*vy2o)/msun, m1,x1o,y1o,vx1o,vel_arr[i], m2,x2o,y2o,vx2o,vy2o])
-    
     Slopes = []
     Eccentricities = []
     
-    for i in range(len(S)):
-        S1 = odeint(generalSystem2d,i,t)
-        Eccentricities.append(Eccentricity(S1, x1o))
-        angs = Perihelion_1st_Planet(S1)
-        orbits = np.linspace(0, len(angs), len(angs))
-        slope, intercept = np.polyfit(orbits, angs, 1)
-        Slopes.append(slope)
+    if vel_arr[0] == vel_arr[1]:
+        for i in range(len(mass_arr)):
+            S = np.array([])
+            S = np.append(S, [msun,0,0,0,-(m1*vy1o + mass_arr[i]*vy2o)/msun, m1,x1o,y1o,vx1o,vy1o, mass_arr[i],x2o,y2o,vx2o,vy2o])
+            S1 = odeint(generalSystem2d,S,t)
+            Eccentricities.append(Eccentricity(S1, x1o))
+            angs = Perihelion_1st_Planet(S1)
+            orbits = np.linspace(0, len(angs), len(angs))
+            slope, intercept = np.polyfit(orbits, angs, 1)
+            Slopes.append(slope)
+    if mass_arr[0] == mass_arr[1]:
+        for i in range(len(vel_arr)):
+            S = np.array([])
+            S = np.append(S, [msun,0,0,0,-(m1*vel_arr[i] + m2*vy2o)/msun, m1,x1o,y1o,vx1o,vel_arr[i], m2,x2o,y2o,vx2o,vy2o])
+            S1 = odeint(generalSystem2d,S,t)
+            Eccentricities.append(Eccentricity(S1, x1o))
+            angs = Perihelion_1st_Planet(S1)
+            orbits = np.linspace(0, len(angs), len(angs))
+            slope, intercept = np.polyfit(orbits, angs, 1)
+            years = (slope * len(orbits) / 1e10) * 3600 * 24 * 365
+            Slopes.append(years)
         
     return Slopes, Eccentricities
