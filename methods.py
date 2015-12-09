@@ -10,9 +10,11 @@ import matplotlib.patches as patches
 from mpl_toolkits.mplot3d import Axes3D
 
 def generalSystem3d(S,t,G=6.67408e-11):
+    '''This generates the differential equations for a system in 3 dimentions of N       bodies using their state formatted mi,xi,yi,zi,vxi,vyi,vzi'''
     #S0 includes m formatted mi,xi,yi,zi,vxi,vyi,vzi
     #G=6.67408e-11
     #print(S0)
+    #Because we abandoned pursuing 3d early we never optimized this method
     N=len(S)//7
     x = np.zeros(N)
     y = np.zeros(N)
@@ -68,6 +70,7 @@ def generalSystem3d(S,t,G=6.67408e-11):
     return return_array
 	
 def generalSystem2d(S,t,G=6.67408e-11):
+    '''This generates the differential equations for a system in 2 dimentions of N       bodies using their state formatted mi,xi,yi,vxi,vyi'''
     #S includes m formatted mi,xi,yi,vxi,vyi
     #G=6.67408e-11
     N=len(S)//5
@@ -104,10 +107,10 @@ def generalSystem2d(S,t,G=6.67408e-11):
     return return_array
 	
 def PlanetPlot2planets(orbits):
-    #x_set = np.array([orbits[:,1],orbits[:,6],orbits[:,11]])
-    #y_setdef PlanetPlot(orbits):
-    #x_set = np.array([orbits[:,1],orbits[:,6],orbits[:,11]])
-    #y_set = np.array([orbits[:,2],orbits[:,7],orbits[:,12]])
+    '''This method takes the 2 dimensional data for the orbits of a 2 body system
+    and runs an animation of the orbits'''
+    
+    '''Uncomment these and the other comment lower down to save the animation'''
     #Writer = animation.writers['ffmpeg']
     #writer = Writer(fps=30, metadata=dict(artist='Me'), bitrate=1800)
     
@@ -120,7 +123,6 @@ def PlanetPlot2planets(orbits):
     
     sun = plt.Circle((x_set[0][0],y_set[0][0]),6e9,fc = 'y',label='Sun')
     earth = plt.Circle((x_set[1][0],y_set[1][0]),4.6e9,fc = 'b',label='Earth')
-    #moon = plt.Circle((x_set[2][0],y_set[2][0]),2.3e9,fc = 'r')
     line, = ax.plot([], [])
     
     def init():
@@ -128,15 +130,12 @@ def PlanetPlot2planets(orbits):
         ax.add_patch(sun)
         earth.center=(x_set[1][0],y_set[1][0])
         ax.add_patch(earth)
-        #moon.center=(x_set[2][0],y_set[2][0])
-        #ax.add_patch(moon)
         line.set_data(x_set[1][0],y_set[1][0])
         return sun,earth,line
 
     def animate(i):
         sun.center = (x_set[0][i],y_set[0][i])
         earth.center = (x_set[1][i],y_set[1][i])
-        #moon.center = (x_set[2][i],y_set[2][i])
         line.set_data(x_set[1][0:i],y_set[1][0:i])
         return sun,earth,line
 
@@ -145,14 +144,11 @@ def PlanetPlot2planets(orbits):
                                frames=np.arange(1,9997), 
                                interval=10,
                                blit=False,repeat=False)
-    #FFwriter = animation.FFMpegWriter(fps=30)
-    # Set up formatting for the movie files
-    #Writer = animation.writers['ffmpeg.exe']
-    #writer = Writer(fps=30, metadata=dict(artist='Me'), bitrate=1800
     plt.xlabel('Meters',fontsize=15)
     plt.ylabel('Meters',fontsize=15)
     plt.title('The Earth Revolving around the Sun',fontsize=20)
     plt.legend(loc=(0.93,0))
+    '''This is the other comment you have to uncomment'''
     #anim.save('sun_earth.mp4', writer=writer)
     plt.show()
 	
