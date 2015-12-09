@@ -153,10 +153,12 @@ def PlanetPlot2planets(orbits):
     plt.show()
 	
 def SolarSysPlot(orbits):
-    
+    '''This method takes the 2 dimensional data for the orbits of a 9 body system
+    and runs an animation of the orbits'''
     x_set = np.array([orbits[:,1], orbits[:,6], orbits[:,11], orbits[:,16], orbits[:,21], orbits[:,26], orbits[:,31], orbits[:,36], orbits[:,41]])
     y_set = np.array([orbits[:,2], orbits[:,7], orbits[:,12], orbits[:,17], orbits[:,22], orbits[:,27], orbits[:,32], orbits[:,37], orbits[:,42]])
 
+    '''Uncomment these and the other comment lower down to save the animation'''
     #Writer = animation.writers['ffmpeg']
     #writer = Writer(fps=80, metadata=dict(artist='Me'), bitrate=1800)
 
@@ -252,14 +254,17 @@ def SolarSysPlot(orbits):
     plt.ylabel('Meters',fontsize=15)
     plt.title('Our Solar System',fontsize=20)
     plt.legend(loc=(0.90,0.3))
+    '''This is the other comment you have to uncomment'''
     #anim.save('solar_system.mp4', writer=writer)
     plt.show()
 	    
 def Precession_Plot_3_Bodies(orbits):
-    
+    '''This method takes the 2 dimensional data for the orbits of a 3 body system
+    and runs an animation of the orbits'''
     x_set = np.array([orbits[:,1],orbits[:,6],orbits[:,11]])
     y_set = np.array([orbits[:,2],orbits[:,7],orbits[:,12]])
     
+    '''Uncomment these and the other comment lower down to save the animation'''
     #Writer = animation.writers['ffmpeg']
     #writer = Writer(fps=30, metadata=dict(artist='Me'), bitrate=1800)
     
@@ -306,10 +311,13 @@ def Precession_Plot_3_Bodies(orbits):
     plt.ylabel('Meters',fontsize=15)
     plt.title('3 Body Simple Precession',fontsize=20)
     plt.legend(loc=(0.90,0.3))
+    '''This is the other comment you have to uncomment'''
     #anim.save('precession_3bodies.mp4', writer=writer)
     plt.show()
 	
 def Perihelion_1st_Planet(ode_arr):
+    '''This code takes the state data for the orbits of an N body system in 2 dimensions and calculates the angle that the 
+    perihelion of the second bodies orbit is displaced from the x axis for each orbit'''
     sunx = ode_arr[:,1]
     suny = ode_arr[:,2]
     p1x = ode_arr[:,6]
@@ -325,6 +333,7 @@ def Perihelion_1st_Planet(ode_arr):
     return angs
 	
 def Eccentricity(ODE, perihelion):
+    '''This method takes the orbit data and the location of the first perihelion and calculates the eccentricity of the orbit'''
     for i in range(1,len(ODE) -1):
         if abs(ODE[i,6]) >= abs(ODE[i-1,6]) and abs(ODE[i,6]) >= abs(ODE[i+1,6]):
             aphelion = abs(ODE[i,6])
@@ -333,6 +342,7 @@ def Eccentricity(ODE, perihelion):
     return eccentricity 
 	
 def Editing_Precession(mass_arr, vel_arr):
+    '''This method takes an array of masses and an array of velocity one of which is constant and returns the eccentricity of       each orbit in one array and the corresponding slope in radians per earth years'''
     # Please make one of the above arrays is constant for any one run through
     t=np.linspace(0,1e10,1e7+1)
     G = 6.67408e-11
